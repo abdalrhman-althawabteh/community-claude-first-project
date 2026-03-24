@@ -2,13 +2,11 @@
    LEEDS ALCHEMY — Admin Panel Scripts
 ══════════════════════════════════════════════════ */
 
-// Keys loaded from config.js (gitignored)
+// Keys loaded from config.js (gitignored — generated on Vercel via build step)
 let supabaseClient = null;
 try {
-  if (typeof CONFIG !== 'undefined') {
+  if (typeof CONFIG !== 'undefined' && window.supabase) {
     supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-  } else {
-    console.error('config.js not found. Copy config.example.js to config.js and add your keys.');
   }
 } catch (e) {
   console.error('Failed to initialize Supabase:', e);
@@ -22,9 +20,14 @@ const isLoginPage = document.body.classList.contains('login-page');
 const isDashboardPage = document.body.classList.contains('dashboard-page');
 const isContentPage = document.body.classList.contains('content-page');
 
-if (isLoginPage) initLoginPage();
-if (isDashboardPage) initDashboardPage();
-if (isContentPage) initContentPage();
+// Guard: if Supabase isn't configured, protected pages redirect to login
+if (!supabaseClient && (isDashboardPage || isContentPage)) {
+  window.location.href = '/admin/';
+} else {
+  if (isLoginPage) initLoginPage();
+  if (isDashboardPage) initDashboardPage();
+  if (isContentPage) initContentPage();
+}
 
 
 /* ══════════════════════════════════════════════════
@@ -32,6 +35,16 @@ if (isContentPage) initContentPage();
 ══════════════════════════════════════════════════ */
 
 async function initLoginPage() {
+  const loginError = document.getElementById('loginError');
+  const loginBtn = document.getElementById('loginBtn');
+
+  // If Supabase isn't configured, show setup message
+  if (!supabaseClient) {
+    if (loginError) loginError.textContent = 'Configuration missing. Add your API keys to config.js (see config.example.js).';
+    if (loginBtn) loginBtn.disabled = true;
+    return;
+  }
+
   // If already logged in, redirect to dashboard
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
@@ -42,8 +55,6 @@ async function initLoginPage() {
   const form = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
-  const loginBtn = document.getElementById('loginBtn');
-  const loginError = document.getElementById('loginError');
   const togglePassword = document.getElementById('togglePassword');
 
   // Toggle password visibility
