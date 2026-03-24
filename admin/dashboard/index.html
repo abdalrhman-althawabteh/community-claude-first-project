@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Leeds Alchemy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../admin.css?v=3">
+</head>
+<body class="dashboard-page">
+
+<!-- Animated grain overlay -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════
+     ADMIN NAVBAR
+══════════════════════════════════════ -->
+<nav class="admin-navbar">
+    <div class="admin-nav-container">
+        <a href="/" class="nav-logo">
+            <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3L36 12.5V28.5L20 38L4 28.5V12.5L20 3Z" stroke="#2563EB" stroke-width="1.5" fill="rgba(37,99,235,0.07)"/>
+                <path d="M13.5 20L18 24.5L26.5 16" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">
+                <span class="logo-leeds">Leeds</span><span class="logo-alchemy">Alchemy</span>
+            </span>
+        </a>
+
+        <div class="admin-nav-links">
+            <a href="/admin/dashboard/" class="admin-nav-link active">Dashboard</a>
+            <a href="/admin/content/" class="admin-nav-link">Content</a>
+        </div>
+
+        <div class="admin-nav-right">
+            <span class="admin-badge">Admin</span>
+            <span class="admin-email" id="adminEmail"></span>
+            <button class="logout-btn" id="logoutBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Sign Out
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD CONTENT
+══════════════════════════════════════ -->
+<main class="dashboard-main">
+    <div class="dashboard-container">
+
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Dashboard</h1>
+                <p class="dashboard-subtitle" id="dashboardDate"></p>
+            </div>
+            <button class="refresh-btn" id="refreshBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <polyline points="1 20 1 14 7 14"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalMessages">—</span>
+                    <span class="stat-label">Total Messages</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="todayMessages">—</span>
+                    <span class="stat-label">Today's Messages</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="weekMessages">—</span>
+                    <span class="stat-label">This Week</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="uniqueEmails">—</span>
+                    <span class="stat-label">Unique Contacts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2 class="chart-title">Messages Over Time</h2>
+                <div class="chart-filters">
+                    <button class="chart-filter active" data-range="7">7 Days</button>
+                    <button class="chart-filter" data-range="14">14 Days</button>
+                    <button class="chart-filter" data-range="30">30 Days</button>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="messagesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Messages Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h2 class="table-title">All Messages</h2>
+                <div class="table-search-wrapper">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" id="tableSearch" placeholder="Search messages..." class="table-search">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="messagesTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Service</th>
+                            <th>Budget</th>
+                            <th>Timeline</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messagesBody">
+                        <tr class="loading-row">
+                            <td colspan="8">
+                                <div class="loading-spinner"></div>
+                                Loading messages...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer" id="tableFooter">
+                <span class="table-count" id="tableCount"></span>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="../../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="../admin.js"></script>
+</body>
+</html>

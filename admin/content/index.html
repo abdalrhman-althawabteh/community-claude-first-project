@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content — Leeds Alchemy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../admin.css?v=3">
+</head>
+<body class="content-page">
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav class="admin-navbar">
+    <div class="admin-nav-container">
+        <a href="/" class="nav-logo">
+            <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3L36 12.5V28.5L20 38L4 28.5V12.5L20 3Z" stroke="#2563EB" stroke-width="1.5" fill="rgba(37,99,235,0.07)"/>
+                <path d="M13.5 20L18 24.5L26.5 16" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">
+                <span class="logo-leeds">Leeds</span><span class="logo-alchemy">Alchemy</span>
+            </span>
+        </a>
+
+        <div class="admin-nav-links">
+            <a href="/admin/dashboard/" class="admin-nav-link">Dashboard</a>
+            <a href="/admin/content/" class="admin-nav-link active">Content</a>
+        </div>
+
+        <div class="admin-nav-right">
+            <span class="admin-badge">Admin</span>
+            <span class="admin-email" id="adminEmail"></span>
+            <button class="logout-btn" id="logoutBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Sign Out
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     CONTENT
+══════════════════════════════════════ -->
+<main class="dashboard-main">
+    <div class="dashboard-container">
+
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Story Generator</h1>
+                <p class="dashboard-subtitle">Record your idea, AI writes your Instagram story slides</p>
+            </div>
+        </div>
+
+        <!-- ── AI Guidelines (collapsible) ── -->
+        <div class="guidelines-card" id="guidelinesCard">
+            <div class="guidelines-toggle" onclick="toggleGuidelines()">
+                <h3>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    AI Writing Guidelines
+                </h3>
+                <svg class="guidelines-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </div>
+            <div class="guidelines-body">
+                <p class="guidelines-hint">Define your writing style, tone, topics, and audience. The AI will follow these every time you generate.</p>
+                <textarea
+                    id="guidelinesText"
+                    class="guidelines-textarea"
+                    dir="auto"
+                    placeholder="Example: I run an AI automation agency called Leeds Alchemy. My tone is professional but approachable. I talk about AI, automation, business growth, and tech tips. My audience is business owners and entrepreneurs in the Arab world. Write stories that are direct, valuable, and build authority."
+                ></textarea>
+                <p class="guidelines-saved" id="guidelinesSaved">Guidelines saved</p>
+            </div>
+        </div>
+
+        <!-- ── Voice Input ── -->
+        <div class="input-card">
+            <div class="input-row">
+
+                <button class="record-btn" id="recordBtn" aria-label="Record">
+                    <svg class="mic-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    <div class="record-pulse"></div>
+                </button>
+
+                <div class="input-body">
+                    <p class="input-status" id="inputStatus">Tap the mic and describe your story idea</p>
+                    <textarea
+                        id="transcriptText"
+                        class="transcript-area"
+                        dir="auto"
+                        placeholder="Your voice will be transcribed here — or type your idea directly..."
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="generate-btn" id="generateBtn" disabled>
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            Generate Story Slides
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Generated Slides ── -->
+        <div class="stories-section" id="storiesSection">
+            <div class="stories-header">
+                <h2 class="stories-title">Your Story Slides</h2>
+                <div class="stories-header-actions">
+                    <button class="save-history-btn" id="saveHistoryBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Save to History
+                    </button>
+                    <button class="copy-all-btn" id="copyAllBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy All
+                    </button>
+                </div>
+            </div>
+            <div class="slides-row" id="slidesRow"></div>
+        </div>
+
+        <!-- ── Slide History ── -->
+        <div class="history-section" id="historySection">
+            <div class="history-toggle" onclick="toggleHistory()">
+                <h2 class="history-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Slide History
+                    <span class="history-count" id="historyCount"></span>
+                </h2>
+                <svg class="history-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </div>
+            <div class="history-body" id="historyBody">
+                <div class="history-list" id="historyList">
+                    <p class="history-loading">Loading history...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="../../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../admin.js"></script>
+<script>
+/* ══════════════════════════════════════════════════
+   CONTENT — Voice → AI Story Generator
+══════════════════════════════════════════════════ */
+
+const OPENAI_KEY = (typeof CONFIG !== 'undefined') ? CONFIG.OPENAI_KEY : '';
+const GUIDELINES_KEY = 'leeds_ai_guidelines';
+
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+let micStream = null;
+let currentSlides = [];
+
+const recordBtn      = document.getElementById('recordBtn');
+const transcriptEl   = document.getElementById('transcriptText');
+const statusEl       = document.getElementById('inputStatus');
+const generateBtn    = document.getElementById('generateBtn');
+const storiesSection = document.getElementById('storiesSection');
+const slidesRow      = document.getElementById('slidesRow');
+const copyAllBtn     = document.getElementById('copyAllBtn');
+const guidelinesCard = document.getElementById('guidelinesCard');
+const guidelinesText = document.getElementById('guidelinesText');
+const guidelinesSaved = document.getElementById('guidelinesSaved');
+
+
+/* ── Guidelines ─────────────────────── */
+
+// Load saved guidelines
+guidelinesText.value = localStorage.getItem(GUIDELINES_KEY) || '';
+
+// Auto-save on change (debounced)
+let saveTimeout = null;
+guidelinesText.addEventListener('input', () => {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        localStorage.setItem(GUIDELINES_KEY, guidelinesText.value);
+        guidelinesSaved.classList.add('show');
+        setTimeout(() => guidelinesSaved.classList.remove('show'), 2000);
+    }, 600);
+});
+
+function toggleGuidelines() {
+    guidelinesCard.classList.toggle('open');
+}
+
+// Open if guidelines exist
+if (guidelinesText.value.trim()) {
+    guidelinesCard.classList.add('open');
+}
+
+
+/* ── Recording ──────────────────────── */
+
+recordBtn.addEventListener('click', () => {
+    if (!isRecording) startRecording();
+    else stopRecording();
+});
+
+async function startRecording() {
+    try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+        mediaRecorder = new MediaRecorder(micStream, { mimeType });
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+            const ext = mimeType.includes('webm') ? 'webm' : 'mp4';
+            const blob = new Blob(audioChunks, { type: mimeType });
+            micStream.getTracks().forEach(t => t.stop());
+            await transcribeAudio(blob, ext);
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        recordBtn.classList.add('is-recording');
+        setStatus('Recording... tap mic again to stop', 'recording');
+    } catch (err) {
+        console.error('Mic error:', err);
+        setStatus('Microphone blocked. Allow access in browser settings.', 'error');
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordBtn.classList.remove('is-recording');
+        recordBtn.classList.add('is-loading');
+        setStatus('Transcribing your voice...', 'processing');
+    }
+}
+
+async function transcribeAudio(blob, ext) {
+    const formData = new FormData();
+    formData.append('file', blob, 'recording.' + ext);
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'ar');
+
+    try {
+        const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + OPENAI_KEY },
+            body: formData
+        });
+        if (!res.ok) throw new Error(res.status);
+
+        const data = await res.json();
+        const text = (data.text || '').trim();
+
+        recordBtn.classList.remove('is-loading');
+
+        if (text) {
+            transcriptEl.value = text;
+            generateBtn.disabled = false;
+            setStatus('Done. Edit if needed, then generate your slides.', 'success');
+        } else {
+            setStatus('No speech detected. Try again.', 'error');
+        }
+    } catch (err) {
+        console.error('Transcription error:', err);
+        recordBtn.classList.remove('is-loading');
+        setStatus('Transcription failed. Check connection.', 'error');
+    }
+}
+
+
+/* ── Enable generate when typing ───── */
+
+transcriptEl.addEventListener('input', () => {
+    generateBtn.disabled = !transcriptEl.value.trim();
+});
+
+
+/* ── AI Story Generation ───────────── */
+
+generateBtn.addEventListener('click', generateStories);
+
+async function generateStories() {
+    const idea = transcriptEl.value.trim();
+    if (!idea) return;
+
+    generateBtn.disabled = true;
+    generateBtn.classList.add('is-loading');
+    setStatus('AI is writing your story slides...', 'processing');
+
+    // Build system prompt with user guidelines
+    const userGuidelines = guidelinesText.value.trim();
+    let systemPrompt = `You are an expert Instagram content creator.
+
+Your job: take the user's raw idea and turn it into a sequence of exactly 5 Instagram story slides.
+
+Rules:
+- Write in Arabic
+- Each slide is 1-3 short sentences max — punchy, clear, engaging
+- Slide 1: Hook — grab attention with a question, bold claim, or surprising fact
+- Slides 2-4: Core content — deliver value, tips, insights, or advance the story
+- Slide 5: CTA — call to action (follow, DM, save, share, visit link, etc.)
+- Use a confident, professional but approachable tone
+- Do NOT use hashtags or emojis
+- Return ONLY a JSON array of exactly 5 strings. No markdown, no code fences, no explanation.
+
+Example: ["slide 1", "slide 2", "slide 3", "slide 4", "slide 5"]`;
+
+    if (userGuidelines) {
+        systemPrompt += `\n\nIMPORTANT — The user has defined these writing guidelines. Follow them closely:\n${userGuidelines}`;
+    }
+
+    try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + OPENAI_KEY
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: idea }
+                ],
+                temperature: 0.8
+            })
+        });
+
+        if (!res.ok) throw new Error(res.status);
+
+        const data = await res.json();
+        let content = data.choices[0].message.content.trim();
+
+        // Strip code fences if present
+        content = content.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+
+        currentSlides = JSON.parse(content);
+        renderSlides(currentSlides);
+        setStatus('Your 5 story slides are ready. Click any slide to edit.', 'success');
+
+    } catch (err) {
+        console.error('Generation error:', err);
+        setStatus('Generation failed. Please try again.', 'error');
+    } finally {
+        generateBtn.disabled = false;
+        generateBtn.classList.remove('is-loading');
+    }
+}
+
+
+/* ── Render Slides ─────────────────── */
+
+const slideLabels = ['Hook', 'Build', 'Value', 'Deepen', 'CTA'];
+
+function renderSlides(slides) {
+    storiesSection.classList.add('visible');
+
+    slidesRow.innerHTML = slides.map((text, i) => `
+        <div class="slide-card">
+            <div class="slide-top">
+                <span class="slide-number">${i + 1}</span>
+                <span class="slide-label">${slideLabels[i] || 'Slide'}</span>
+            </div>
+            <textarea
+                class="slide-text"
+                dir="rtl"
+                id="slide-text-${i}"
+                oninput="autoResize(this); updateSlide(${i}, this.value)"
+            >${safeText(text)}</textarea>
+            <div class="slide-bottom">
+                <span class="slide-edit-hint">click to edit</span>
+                <button class="slide-copy" onclick="copySlide(${i})" id="slide-copy-${i}">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    Copy
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    // Auto-resize all textareas after render
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.slide-text').forEach(autoResize);
+    });
+}
+
+function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+}
+
+function updateSlide(index, value) {
+    currentSlides[index] = value;
+}
+
+function copySlide(index) {
+    const text = currentSlides[index];
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('slide-copy-' + index);
+        if (btn) {
+            btn.classList.add('copied');
+            btn.innerHTML = 'Copied!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+            }, 2000);
+        }
+    });
+}
+
+copyAllBtn.addEventListener('click', () => {
+    if (!currentSlides.length) return;
+    const allText = currentSlides.map((t, i) => `${i + 1}. ${t}`).join('\n\n');
+    navigator.clipboard.writeText(allText).then(() => {
+        const orig = copyAllBtn.innerHTML;
+        copyAllBtn.textContent = 'Copied!';
+        setTimeout(() => { copyAllBtn.innerHTML = orig; }, 2000);
+    });
+});
+
+
+/* ── Save to History ────────────────── */
+
+const saveHistoryBtn = document.getElementById('saveHistoryBtn');
+const historyList    = document.getElementById('historyList');
+const historyCount   = document.getElementById('historyCount');
+const historySection = document.getElementById('historySection');
+
+saveHistoryBtn.addEventListener('click', saveToHistory);
+
+async function saveToHistory() {
+    if (!currentSlides.length) return;
+
+    const idea = transcriptEl.value.trim();
+    saveHistoryBtn.disabled = true;
+    saveHistoryBtn.textContent = 'Saving...';
+
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return;
+
+        const { error } = await supabaseClient
+            .from('slide_history')
+            .insert({
+                user_id: session.user.id,
+                idea_text: idea || 'No idea text',
+                slides: currentSlides
+            });
+
+        if (error) throw error;
+
+        saveHistoryBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Saved!';
+        setTimeout(() => {
+            saveHistoryBtn.disabled = false;
+            saveHistoryBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save to History';
+        }, 2000);
+
+        // Reload history
+        await loadHistory();
+
+    } catch (err) {
+        console.error('Save error:', err);
+        saveHistoryBtn.textContent = 'Save failed';
+        setTimeout(() => {
+            saveHistoryBtn.disabled = false;
+            saveHistoryBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save to History';
+        }, 2000);
+    }
+}
+
+
+/* ── History Toggle & Load ─────────── */
+
+function toggleHistory() {
+    historySection.classList.toggle('open');
+    if (historySection.classList.contains('open') && historyList.querySelector('.history-loading')) {
+        loadHistory();
+    }
+}
+
+let historyCache = {};
+
+async function loadHistory() {
+    historyList.innerHTML = '<p class="history-loading">Loading history...</p>';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('slide_history')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        historyCount.textContent = data.length ? `(${data.length})` : '';
+
+        if (!data.length) {
+            historyList.innerHTML = '<p class="history-empty">No saved slides yet. Generate and save your first story!</p>';
+            return;
+        }
+
+        // Cache slides data for loadFromHistory
+        historyCache = {};
+        data.forEach(item => { historyCache[item.id] = item.slides || []; });
+
+        historyList.innerHTML = data.map(item => {
+            const date = new Date(item.created_at);
+            const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            const slides = item.slides || [];
+            const preview = slides[0] ? (slides[0].substring(0, 80) + (slides[0].length > 80 ? '...' : '')) : '';
+
+            return `
+                <div class="history-item" data-id="${item.id}">
+                    <div class="history-item-header" onclick="toggleHistoryItem(this)">
+                        <div class="history-item-info">
+                            <span class="history-date">${dateStr} · ${timeStr}</span>
+                            <span class="history-idea" dir="auto">${safeText(item.idea_text || '')}</span>
+                            <span class="history-preview" dir="rtl">${safeText(preview)}</span>
+                        </div>
+                        <div class="history-item-actions">
+                            <button class="history-load-btn" onclick="event.stopPropagation(); loadFromHistory('${item.id}')" title="Load slides">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="1 4 1 10 7 10"/>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                                </svg>
+                            </button>
+                            <button class="history-delete-btn" onclick="event.stopPropagation(); deleteFromHistory('${item.id}')" title="Delete">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                            <svg class="history-item-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="history-item-slides">
+                        ${slides.map((s, i) => `
+                            <div class="history-slide">
+                                <span class="history-slide-num">${i + 1}</span>
+                                <span class="history-slide-label">${slideLabels[i] || 'Slide'}</span>
+                                <p class="history-slide-text" dir="rtl">${safeText(s)}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error('Load history error:', err);
+        historyList.innerHTML = '<p class="history-empty">Failed to load history.</p>';
+    }
+}
+
+function toggleHistoryItem(headerEl) {
+    headerEl.closest('.history-item').classList.toggle('expanded');
+}
+
+function loadFromHistory(id) {
+    const slides = historyCache[id];
+    if (!slides) return;
+    currentSlides = [...slides];
+    renderSlides(slides);
+    setStatus('Loaded slides from history. Click any slide to edit.', 'success');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteFromHistory(id) {
+    if (!confirm('Delete this from history?')) return;
+
+    try {
+        const { error } = await supabaseClient
+            .from('slide_history')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        await loadHistory();
+    } catch (err) {
+        console.error('Delete error:', err);
+    }
+}
+
+// Load history on page init
+loadHistory();
+
+
+/* ── Helpers ────────────────────────── */
+
+function setStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'input-status ' + (type || '');
+}
+
+function safeText(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+}
+</script>
+</body>
+</html>
